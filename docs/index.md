@@ -1,3 +1,6 @@
+<a href="https://www.ambisafe.co/">![test](img/logo_red.png)</a>
+**********
+
 # About ETokenD
 
 Drop-in replacement for bitcoind JSON-RPC which proxies to the [eToken API](https://github.com/Ambisafe/etoken-docs)
