@@ -14,7 +14,7 @@ Project was inspired by [BitGoD](https://github.com/BitGo/bitgod)
 
 # Installation
 
-**NodeJS 4.x or 6.x must be installed as a prerequisite.**
+**NodeJS 6+ must be installed as a prerequisite.**
 ```
 $ npm install
 $ npm run-script build
@@ -26,67 +26,66 @@ Running **./bin/etokend -h** will produce usage information.
 
 ```
 $ ./bin/etokend -h
-usage: etokend [-h] [-v] [--conf CONF] [--preload PRELOAD]
-               [--assetaddress ASSETADDRESS] [--asset ASSET]
-               [--institution INSTITUTION]
-               [--netkicurrencycode NETKICURRENCYCODE] [--baseunit BASEUNIT]
-               [--confirmtimeout CONFIRMTIMEOUT] [--privatekey PRIVATEKEY]
-               [--transactionshistory TRANSACTIONSHISTORY]
-               [--gethnode GETHNODE] [--rpcbind RPCBIND] [--rpcport RPCPORT]
-               [--rpcuser RPCUSER] [--rpcpassword RPCPASSWORD]
-               [--logfile LOGFILE]
+usage: etokend [-h] [-v] [--conf path] [--state path] [--preload num]
+               [--assetaddress address] [--asset ICP] [--institution INST]
+               [--netkicurrencycode NTK] [--baseunit num] [--gasprice num]
+               [--confirmtimeout msec] [--privatekey key]
+               [--transactionshistory {off,prod,stage}] [--gethnode URL]
+               [--rpcbind host] [--rpcport port] [--rpcuser user]
+               [--rpcpassword password] [--logfile path]
 
 ETokenD
 
 Optional arguments:
   -h, --help            Show this help message and exit.
   -v, --version         Show program's version number and exit.
-  --conf CONF           Specify configuration file (default: /etc/etokend.
+  --conf path           Specify configuration file (default: /etc/etokend.
                         conf)
-  --preload PRELOAD     Specify how many blocks to preload from the past
+  --state path          Json file to store 2 step transactions state. Backup 
+                        regularly! (default: state.json)
+  --preload num         Specify how many blocks to preload from the past 
                         (default: 5000)
-  --assetaddress ASSETADDRESS
-                        Ethereum address of the asset contract (default:
+  --assetaddress address
+                        Ethereum address of the asset contract (default: 
                         0x03efee7c710ad3b2ca1301309ee0dbc134acbb26)
-  --asset ASSET         ICAP asset code (default: EXM)
-  --institution INSTITUTION
-                        ICAP instituion to use (default: AMBI)
-  --netkicurrencycode NETKICURRENCYCODE
+  --asset ICP           ICAP asset code (default: EXM)
+  --institution INST    ICAP instituion to use (default: AMBI)
+  --netkicurrencycode NTK
                         Netki currency code (default: ETH)
-  --baseunit BASEUNIT   Baseunit param, 0..255 (default: auto)
-  --confirmtimeout CONFIRMTIMEOUT
-                        Time to release reserved nonce, in msec (default:
+  --baseunit num        BaseUnit param [0..255] (default: auto)
+  --gasprice num        GasPrice for outgoing transactions in gwei
+                        [0.001..100] (default: 4)
+  --confirmtimeout msec
+                        Time to release reserved nonce, in msec (default: 
                         5000)
-  --privatekey PRIVATEKEY
-                        Hex representation of private key to sign
+  --privatekey key      Hex representation of private key to sign 
                         transactions [privateKeyHex], mandatory for sends
-  --transactionshistory TRANSACTIONSHISTORY
-                        Use transactions history service [off/prod/stage]
-                        (default: stage)
-  --gethnode GETHNODE   geth node to talk to (default: http://localhost:8545)
-                        Supernode service can be ordered at
-                        https://www.ambisafe.co/services/
-  --rpcbind RPCBIND     Bind to given address to listen for JSON-RPC
+  --transactionshistory {off,prod,stage}
+                        Use transactions history service (default: stage)
+  --gethnode URL        geth node to talk to (default: http://localhost:8545).
+                         Supernode service can be ordered at https://www.
+                        ambisafe.co/services/
+  --rpcbind host        Bind to given address to listen for JSON-RPC 
                         connections (default: localhost)
-  --rpcport RPCPORT     Listen for JSON-RPC connections on RPCPORT (default:
+  --rpcport port        Listen for JSON-RPC connections on RPCPORT (default: 
                         18545)
-  --rpcuser RPCUSER     Username for RPC basic auth (default: none)
-  --rpcpassword RPCPASSWORD
+  --rpcuser user        Username for RPC basic auth (default: none)
+  --rpcpassword password
                         Password for RPC basic auth (default: none)
-  --logfile LOGFILE     Log file location
+  --logfile path        Log file location
 ```
 
-Running ETokenD with no command line args should start the server, using EXMPL asset contract of EToken's test environment at [0x3fce483a0236ba36869e4e82151006045e7d3331](https://github.com/Ambisafe/etoken-docs/wiki/Integration-Instance). To do much of anything useful, you will also need to tell ETokenD which private key to use, and make sure corresponding address is registered in the eToken ICAP registry.
+Running ETokenD with no command line args should start the server, using EXMPL asset contract of EToken's test environment at [0x3fce483a0236ba36869e4e82151006045e7d3331](https://github.com/Ambisafe/etoken-docs/wiki/Integration-Instance). To do much of anything useful, you will also need to tell ETokenD which private key to use, and make sure corresponding address is registered in the EToken ICAP registry.
 
 ```
 $ ./bin/etokend
 Private key is not specified or invalid. Will use AMBI address as receive for demo purposes. You will not be able to do sends!
 Current block: 1882819
-eToken contract address 0x3fce483a0236ba36869e4e82151006045e7d3331
+EToken contract address 0x3fce483a0236ba36869e4e82151006045e7d3331
 RegistryICAP contract address 0x98a715181466035e10ea4b7da5635a356b1d1c4d
 EventsHistory contract address 0x414fbf684a6426cf6012623f51170a5a86161d52
-eToken version 1
-eToken asset symbol: EXMPL
+EToken version 1
+EToken asset symbol: EXMPL
 Baseunit for the asset is 2
 Signer/Institution address is 0x1Ff21eCa1c3ba96ed53783aB9C92FfbF77862584
 Using transactions history service.
@@ -111,7 +110,7 @@ In order to transact, you will need to have at least 0.01 ETH on your signer add
 
 # Production
 
-As mentioned previously, ETokenD defaults to using eToken's test environment, which uses different testing coins. In order to use the production eToken environment, you need to specify one of production asset addresses using **--asset** option.
+As mentioned previously, ETokenD defaults to using EToken's test environment, which uses different testing coins. In order to use the production EToken environment, you need to specify one of production asset addresses using **--asset** option.
 The port used by ETokenD by default is the same as those used by geth, plus 10000.
 
 ```
@@ -136,7 +135,7 @@ XE58EXMAMBIOG08GBWB3
 $ bitcoin-cli -rpcport=18545 getrawchangeaddress
 0x1Ff21eCa1c3ba96ed53783aB9C92FfbF77862584
 
-$ bitcoin-cli -rpcport=18545 getbalance [minconf=1]
+$ bitcoin-cli -rpcport=18545 getbalance [address=signerAddress] [minconf=1]
 70.41
 
 $ bitcoin-cli -rpcport=18545 listtransactions [count=10] [from=0]
