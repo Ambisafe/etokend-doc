@@ -14,7 +14,7 @@ Project was inspired by [BitGoD](https://github.com/BitGo/bitgod)
 
 # Installation
 
-**NodeJS 6+ must be installed as a prerequisite.**
+**NodeJS 6+ must be installed along with build-essential as a prerequisite.**
 ```
 $ npm install
 $ npm run-script build
